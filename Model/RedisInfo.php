@@ -9,17 +9,21 @@ namespace Element119\AdminRedisInfo\Model;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Cache\Backend\Redis;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class RedisInfo implements ArgumentInterface
 {
     private CacheInterface $cache;
     private Redis $redis;
+    private DeploymentConfig $deploymentConfig;
 
     public function __construct(
-        CacheInterface $cache
+        CacheInterface $cache,
+        DeploymentConfig $deploymentConfig
     ) {
         $this->cache = $cache;
+        $this->deploymentConfig = $deploymentConfig;
         $this->redis = $this->cache->getFrontend()->getBackend();
     }
 
@@ -35,6 +39,7 @@ class RedisInfo implements ArgumentInterface
                 'Used Memory Peak' => $redisInfo['used_memory_peak_human'],
                 'Used Memory Peak Percentage' => $redisInfo['used_memory_peak_perc'],
                 'Used Memory Dataset Percentage' => $redisInfo['used_memory_dataset_perc'],
+                'Percentage of Keys Used by Magento' => $this->getMagentoKeyUsagePercentage($redisInfo) . '%',
                 'Total System Memory' => $redisInfo['total_system_memory_human'],
                 'Max. Memory' => $redisInfo['maxmemory_human'],
                 'Max. Memory Policy' => $redisInfo['maxmemory_policy'],
@@ -65,20 +70,6 @@ class RedisInfo implements ArgumentInterface
         ];
     }
 
-    /**
-     * Get all Redis information.
-     *
-     * This function exists solely to ease extensibility.
-     *
-     * @link https://redis.io/commands/info/
-     *
-     * @return array
-     */
-    public function getAllRedisInfo(): array
-    {
-        return $this->redis->getInfo();
-    }
-
     public function getDatabaseKeyspaceInfo(array $redisInfo): array
     {
         $redisDatabaseInfo = [];
@@ -101,5 +92,34 @@ class RedisInfo implements ArgumentInterface
         }
 
         return $redisDatabaseInfo;
+    }
+
+    public function getMagentoKeyUsagePercentage(array $redisInfo): float
+    {
+        $cacheConfig = $this->deploymentConfig->get('cache');
+
+        if (!isset($cacheConfig['frontend']['default']['id_prefix'])) {
+            return -1.0;
+        }
+
+        $allTags = $this->redis->getTags() + $this->redis->getIds();
+        $redisKeyPrefix = $cacheConfig['frontend']['default']['id_prefix'];
+        $tagsWithPrefix = preg_grep('/^' . preg_quote($redisKeyPrefix) . '/m', $allTags);
+
+        return round((count($tagsWithPrefix) / count($allTags)) * 100, 2);
+    }
+
+    /**
+     * Get all Redis information.
+     *
+     * This function exists solely to ease extensibility.
+     *
+     * @link https://redis.io/commands/info/
+     *
+     * @return array
+     */
+    public function getAllRedisInfo(): array
+    {
+        return $this->redis->getInfo();
     }
 }
