@@ -12,8 +12,8 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
                     <resource id="Magento_Backend::tools">
-                        <resource id="Element119_AdminRedisInfo::view"
-                                  title="Redis Info View"
+                        <resource id="Element119_AdminRedisReport::view"
+                                  title="Redis Report View"
                                   translate="title"
                                   sortOrder="1000"/>
                     </resource>

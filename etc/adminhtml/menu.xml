@@ -8,13 +8,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Element119_AdminRedisInfo::view"
-             title="Redis Info"
-             action="redis_info/index"
+        <add id="Element119_AdminRedisReport::view"
+             title="Redis Report"
+             action="redis_report/index"
              translate="title"
-             module="Element119_AdminRedisInfo"
+             module="Element119_AdminRedisReport"
              sortOrder="1000"
              parent="Magento_Backend::system_tools"
-             resource="Element119_AdminRedisInfo::view"/>
+             resource="Element119_AdminRedisReport::view"/>
     </menu>
 </config>

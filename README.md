@@ -4,7 +4,7 @@
 
 </div>
 
-<h1 align="center">element119 | Admin Redis Info</h1>
+<h1 align="center">element119 | Admin Redis Report</h1>
 
 ## 📝 Features
 ✔️ ...
@@ -30,7 +30,7 @@
 ## 🔌 Installation
 Run the following command to *install* this module:
 ```bash
-composer require element119/module-admin-redis-info
+composer require element119/module-admin-redis-report
 php bin/magento setup:upgrade
 ```
 
@@ -39,7 +39,7 @@ php bin/magento setup:upgrade
 ## ⏫ Updating
 Run the following command to *update* this module:
 ```bash
-composer update element119/module-admin-redis-info
+composer update element119/module-admin-redis-report
 php bin/magento setup:upgrade
 ```
 
@@ -48,7 +48,7 @@ php bin/magento setup:upgrade
 ## ❌ Uninstallation
 Run the following command to *uninstall* this module:
 ```bash
-composer remove element119/module-admin-redis-info
+composer remove element119/module-admin-redis-report
 php bin/magento setup:upgrade
 ```
 

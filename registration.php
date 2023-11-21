@@ -9,6 +9,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 ComponentRegistrar::register(
     ComponentRegistrar::MODULE,
-    'Element119_AdminRedisInfo',
+    'Element119_AdminRedisReport',
     __DIR__
 );

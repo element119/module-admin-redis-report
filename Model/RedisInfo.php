@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Element119\AdminRedisInfo\Model;
+namespace Element119\AdminRedisReport\Model;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Cache\Backend\Redis;

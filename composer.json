@@ -1,5 +1,5 @@
 {
-    "name": "element119/module-admin-redis-info",
+    "name": "element119/module-admin-redis-report",
     "type": "magento2-module",
     "description": "A Magento 2 module that displays Redis information in the admin.",
     "license": "proprietary",
@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Element119\\AdminRedisInfo\\": ""
+            "Element119\\AdminRedisReport\\": ""
         },
         "files": [
             "registration.php"

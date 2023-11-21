@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="admin">
-        <route id="redis_info" frontName="redis_info">
-            <module name="Element119_AdminRedisInfo"/>
+        <route id="redis_report" frontName="redis_report">
+            <module name="Element119_AdminRedisReport"/>
         </route>
     </router>
 </config>
