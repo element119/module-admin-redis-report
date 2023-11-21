@@ -1,0 +1,42 @@
+/**
+ * Copyright © element119. All rights reserved.
+ * See LICENCE.txt for licence details.
+ */
+#misc-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+#redis-sections {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+section {
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    width: 50%;
+}
+
+section:nth-child(odd) {
+    padding-right: 1rem;
+}
+
+section:nth-child(even) {
+    padding-left: 1rem;
+}
+
+h2 {
+    font-weight: bold;
+    padding-bottom: 1rem;
+}
+
+.data-list {
+    list-style-type: none;
+}
+
+h2,
+.data-list {
+    margin: 0;
+}

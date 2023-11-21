@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © element119. All rights reserved.
+ * See LICENCE.txt for licence details.
+ */
+declare(strict_types=1);
+
+use Element119\AdminRedisInfo\Model\RedisInfo;
+use Magento\Backend\Block\Template;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var array $redisInfo */
+/** @see RedisInfo::get() */
+$redisInfo = $block->getData('redis_info');
+?>
+<section id="databases">
+    <h2><?= $escaper->escapeHtml(__('Database(s)')); ?></h2>
+
+    <?php foreach ($redisInfo['databases'] as $dbNumber => $data): ?>
+        <div>
+            <b><?= $escaper->escapeHtml($dbNumber); ?>:</b>
+            <ul class="data-list">
+                <?php foreach ($data as $key => $value): ?>
+                    <li>
+                        <b><?= $escaper->escapeHtml(ucwords(str_replace('_', ' ', $key))); ?>:</b>
+                        <?= $escaper->escapeHtml($value); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endforeach; ?>
+</section>

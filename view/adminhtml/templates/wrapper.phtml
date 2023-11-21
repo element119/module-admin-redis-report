@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright © element119. All rights reserved.
+ * See LICENCE.txt for licence details.
+ */
+declare(strict_types=1);
+
+use Element119\AdminRedisInfo\Model\RedisInfo;
+use Magento\Backend\Block\Template;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var RedisInfo $redisInfoViewModel */
+$redisInfoViewModel = $block->getData('redis_info_view_model');
+$redisInfo = $redisInfoViewModel->get();
+?>
+<?php if (!$redisInfo): ?>
+    <?= $escaper->escapeHtml(__('Could not retrieve Redis information at this time.')); ?>
+<?php else: ?>
+    <?php /** Forward the Redis information to each immediate child to save them having to fetch it themselves */ ?>
+    <?php foreach ($block->getChildNames() as $childName): ?>
+        <?php $block->getChildBlock($childName)->setData('redis_info', $redisInfo); ?>
+    <?php endforeach; ?>
+
+    <div id="redis-info-wrapper">
+        <div id="misc-info">
+            <a href="https://redis.io/commands/info/#notes" target="_blank">
+                <?= $escaper->escapeHtml(__('Redis Info Command Documentation')); ?>
+            </a>
+
+            <span>
+                <?= $escaper->escapeHtml(__('<b>Redis Version:</b> %1', $redisInfo['version']), ['b']); ?>
+            </span>
+        </div>
+
+        <div id="redis-sections">
+            <?= /* @noEscape */ $block->getChildHtml(); ?>
+        </div>
+    </div>
+<?php endif; ?>
