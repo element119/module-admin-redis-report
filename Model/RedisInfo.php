@@ -92,9 +92,12 @@ class RedisInfo implements ArgumentInterface
                 $data = explode('=', $info);
 
                 array_key_exists($dbKey, $redisDatabaseInfo)
-                    ? $redisDatabaseInfo[$dbKey] += [$data[0] => $data[1]] // append
-                    : $redisDatabaseInfo[$dbKey] = [$data[0] => $data[1]]; // initialise
+                    ? $redisDatabaseInfo[$dbKey] += [$data[0] => (int)$data[1]] // append
+                    : $redisDatabaseInfo[$dbKey] = [$data[0] => (int)$data[1]]; // initialise
             }
+
+            $avgTtlKey = array_key_last($redisDatabaseInfo[$dbKey]);
+            $redisDatabaseInfo[$dbKey][$avgTtlKey] = ($redisDatabaseInfo[$dbKey][$avgTtlKey] / 1000) . ' seconds';
         }
 
         return $redisDatabaseInfo;
