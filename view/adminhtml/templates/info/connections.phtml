@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © element119. All rights reserved.
+ * See LICENCE.txt for licence details.
+ */
+declare(strict_types=1);
+
+use Element119\AdminRedisInfo\Model\RedisInfo;
+use Magento\Backend\Block\Template;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var array $redisInfo */
+/** @see RedisInfo::get() */
+$redisInfo = $block->getData('redis_info');
+?>
+<section id="connections">
+    <h2><?= $escaper->escapeHtml(__('Connections')); ?></h2>
+    <ul class="data-list">
+        <?php foreach ($redisInfo['connections'] as $key => $value): ?>
+            <li>
+                <b><?= $escaper->escapeHtml(__($key)); ?>:</b>
+                <?= $escaper->escapeHtml($value); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</section>
