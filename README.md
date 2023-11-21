@@ -7,23 +7,19 @@
 <h1 align="center">element119 | Admin Redis Report</h1>
 
 ## 📝 Features
-✔️ ...
-
-✔️ ...
-
-✔️ ...
-
-✔️ Supports Hyvä and Luma based themes
+✔️ See a snapshot of the health of Redis from the comfort of the Magento admin
 
 ✔️ Built in accordance with Magento best practises
 
-✔️ Dedicated module configuration section secured with custom admin user controls
+✔️ Custom admin user controls
 
 ✔️ Seamless integration with Magento
 
 ✔️ Built with developers and extensibility in mind to make customisations as easy as possible
 
 ✔️ Installable via Composer
+
+✔️ Theme agnostic
 
 <br/>
 
