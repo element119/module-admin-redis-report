@@ -9,6 +9,10 @@
             "email": "hello@element119.co.uk"
         }
     ],
+    "require": {
+        "php": "^7.4 || ~8.0.0 || ~8.1.0 || ~8.2.0",
+        "magento/module-backend": "*"
+    },
     "autoload": {
         "psr-4": {
             "Element119\\AdminRedisReport\\": ""
