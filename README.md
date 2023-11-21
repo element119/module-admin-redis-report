@@ -52,5 +52,4 @@ php bin/magento setup:upgrade
 
 ## 📚 User Guide
 The Redis information can be found in the admin under `System -> Tools -> Redis Report`.
-
-![admin-report](https://github.com/element119/module-admin-redis-info/assets/40261741/179c506e-0d07-4246-9789-cca7efcc2d58)
+![admin-report](https://github.com/element119/module-admin-redis-report/assets/40261741/c679fd5f-802c-49b3-b279-a8cce75e5c44)
