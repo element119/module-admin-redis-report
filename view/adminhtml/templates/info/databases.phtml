@@ -18,17 +18,19 @@ $redisInfo = $block->getData('redis_info');
 <section id="databases">
     <h2><?= $escaper->escapeHtml(__('Database(s)')); ?></h2>
 
-    <?php foreach ($redisInfo['databases'] as $dbNumber => $data): ?>
-        <div>
-            <b><?= $escaper->escapeHtml($dbNumber); ?>:</b>
-            <ul class="data-list">
-                <?php foreach ($data as $key => $value): ?>
-                    <li>
-                        <b><?= $escaper->escapeHtml(ucwords(str_replace('_', ' ', $key))); ?>:</b>
-                        <?= $escaper->escapeHtml($value); ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    <?php endforeach; ?>
+    <div class="database-wrapper">
+        <?php foreach ($redisInfo['databases'] as $dbNumber => $data): ?>
+            <div class="database-info">
+                <b><?= $escaper->escapeHtml($dbNumber); ?></b>
+                <ul class="data-list">
+                    <?php foreach ($data as $key => $value): ?>
+                        <li>
+                            <b><?= $escaper->escapeHtml(ucwords(str_replace('_', ' ', $key))); ?>:</b>
+                            <?= $escaper->escapeHtml($value); ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endforeach; ?>
+    </div>
 </section>

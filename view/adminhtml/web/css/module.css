@@ -2,12 +2,14 @@
  * Copyright © element119. All rights reserved.
  * See LICENCE.txt for licence details.
  */
+/* Before Section Grid */
 #misc-info {
     display: flex;
     flex-direction: column;
     margin-bottom: 2rem;
 }
 
+/* Generic Section Grid Styles */
 #redis-sections {
     display: flex;
     flex-wrap: wrap;
@@ -20,11 +22,11 @@ section {
 }
 
 section:nth-child(odd) {
-    padding-right: 1rem;
+    padding-right: 1.5rem;
 }
 
 section:nth-child(even) {
-    padding-left: 1rem;
+    padding-left: 1.5rem;
 }
 
 h2 {
@@ -39,4 +41,20 @@ h2 {
 h2,
 .data-list {
     margin: 0;
+}
+
+/* Specific Section Grid Styles */
+/* Databases */
+#databases .database-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#databases .database-info {
+    margin-bottom: 2rem;
+}
+
+#databases li {
+    padding-left: 2rem;
 }
