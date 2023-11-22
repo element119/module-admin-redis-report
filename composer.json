@@ -14,6 +14,9 @@
         "magento/module-backend": "*",
         "ext-json": "*"
     },
+    "suggest": {
+        "ethanyehuda/magento2-cronjobmanager": "A module for managing scheduled cron jobs from magento's admin panel"
+    },
     "autoload": {
         "psr-4": {
             "Element119\\AdminRedisReport\\": ""
