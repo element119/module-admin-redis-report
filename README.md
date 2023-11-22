@@ -23,6 +23,9 @@
 
 ✔️ Theme agnostic
 
+### Upcoming
+⏳ Data visualisation for both current and historic Redis health data
+
 <br/>
 
 ## 🔌 Installation
