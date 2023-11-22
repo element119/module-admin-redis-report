@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © element119. All rights reserved.
+ * See LICENCE.txt for licence details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system">
+            <group id="redis_report"
+                   translate="label"
+                   type="text"
+                   sortOrder="1100"
+                   showInDefault="1"
+                   showInWebsite="0"
+                   showInStore="0">
+                <label>Redis Report</label>
+                <field id="cron_enable"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="10"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0"
+                       canRestore="1">
+                    <label>Collect Redis Report Data Periodically</label>
+                    <comment>The default schedule is every 30 minutes but this may have been changed.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="log_truncate_days"
+                       translate="label comment"
+                       type="text"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0"
+                       canRestore="1">
+                    <label>Number of Days to Keep Historic Redis Report Data</label>
+                    <comment>Absence of a value means historic report data will not be deleted.</comment>
+                    <validate>integer validate-digits validate-not-negative-number</validate>
+                    <depends>
+                        <field id="system/redis_report/cron_enable">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
