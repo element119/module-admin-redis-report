@@ -13,5 +13,10 @@
              method="execute">
             <schedule>*/30 * * * *</schedule>
         </job>
+        <job name="redis_report_log_clean"
+             instance="Element119\AdminRedisReport\Cron\Clean"
+             method="execute">
+            <schedule>0 1 * * *</schedule>
+        </job>
     </group>
 </config>
