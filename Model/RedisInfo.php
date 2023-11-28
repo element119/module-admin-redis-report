@@ -7,9 +7,12 @@ declare(strict_types=1);
 
 namespace Element119\AdminRedisReport\Model;
 
+use Element119\AdminRedisReport\Api\Data\RedisReportInterface;
+use Element119\AdminRedisReport\Api\RedisReportRepositoryInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Cache\Backend\Redis;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class RedisInfo implements ArgumentInterface
@@ -17,13 +20,16 @@ class RedisInfo implements ArgumentInterface
     private CacheInterface $cache;
     private Redis $redis;
     private DeploymentConfig $deploymentConfig;
+    private ResourceConnection $resourceConnection;
 
     public function __construct(
         CacheInterface $cache,
-        DeploymentConfig $deploymentConfig
+        DeploymentConfig $deploymentConfig,
+        ResourceConnection $resourceConnection
     ) {
         $this->cache = $cache;
         $this->deploymentConfig = $deploymentConfig;
+        $this->resourceConnection = $resourceConnection;
         $this->redis = $this->cache->getFrontend()->getBackend();
     }
 
@@ -107,6 +113,22 @@ class RedisInfo implements ArgumentInterface
         $tagsWithPrefix = preg_grep('/^' . preg_quote($redisKeyPrefix) . '/m', $allTags);
 
         return round((count($tagsWithPrefix) / count($allTags)) * 100, 2);
+    }
+
+    public function getHistoricRedisReportData(): array
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $redisReportSelect = $connection->select()->from(
+            $this->resourceConnection->getTableName(RedisReportRepositoryInterface::MAIN_TABLE),
+            [RedisReportInterface::REPORT_DATA]
+        );
+
+        return array_map(
+            function ($data) {
+                return json_decode($data, true);
+            },
+            array_column($connection->query($redisReportSelect)->fetchAll(), RedisReportInterface::REPORT_DATA)
+        );
     }
 
     /**
