@@ -14,13 +14,16 @@ use Magento\Framework\Escaper;
 /** @var RedisInfo $redisInfoViewModel */
 $redisInfoViewModel = $block->getData('redis_info_view_model');
 $redisInfo = $redisInfoViewModel->get();
+$redisHistory = $redisInfoViewModel->getHistoricRedisReportData();
 ?>
 <?php if (!$redisInfo): ?>
     <?= $escaper->escapeHtml(__('Could not retrieve Redis information at this time.')); ?>
 <?php else: ?>
     <?php /** Forward the Redis information to each immediate child to save them having to fetch it themselves */ ?>
     <?php foreach ($block->getChildNames() as $childName): ?>
-        <?php $block->getChildBlock($childName)->setData('redis_info', $redisInfo); ?>
+        <?php $block->getChildBlock($childName)
+            ->setData('redis_info', $redisInfo)
+            ->setData('historic_redis_data', $redisHistory); ?>
     <?php endforeach; ?>
 
     <div id="redis-info-wrapper">
