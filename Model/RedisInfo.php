@@ -14,6 +14,7 @@ use Magento\Framework\Cache\Backend\Redis;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Zend_Db_Statement_Exception;
 
 class RedisInfo implements ArgumentInterface
 {
@@ -115,20 +116,31 @@ class RedisInfo implements ArgumentInterface
         return round((count($tagsWithPrefix) / count($allTags)) * 100, 2);
     }
 
+    /**
+     * Return historic Redis data, keyed by creation timestamp.
+     *
+     * @return array
+     * @throws Zend_Db_Statement_Exception
+     */
     public function getHistoricRedisReportData(): array
     {
+        $reportData = [];
         $connection = $this->resourceConnection->getConnection();
         $redisReportSelect = $connection->select()->from(
             $this->resourceConnection->getTableName(RedisReportRepositoryInterface::MAIN_TABLE),
-            [RedisReportInterface::REPORT_DATA]
+            [
+                RedisReportInterface::REPORT_DATA,
+                RedisReportInterface::CREATED_AT,
+            ]
         );
 
-        return array_map(
-            function ($data) {
-                return json_decode($data, true);
-            },
-            array_column($connection->query($redisReportSelect)->fetchAll(), RedisReportInterface::REPORT_DATA)
-        );
+        foreach ($connection->query($redisReportSelect)->fetchAll() as $dbData) {
+            $reportData[$dbData[RedisReportInterface::CREATED_AT]] = json_decode(
+                $dbData[RedisReportInterface::REPORT_DATA], true
+            );
+        }
+
+        return $reportData;
     }
 
     /**
