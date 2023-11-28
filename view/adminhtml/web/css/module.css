@@ -48,11 +48,11 @@ h2,
 #databases .database-wrapper {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
 }
 
 #databases .database-info {
     margin-bottom: 2rem;
+    margin-right: 5rem;
 }
 
 #databases li {
