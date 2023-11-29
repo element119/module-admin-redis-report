@@ -10,23 +10,8 @@
 }
 
 /* Generic Section Grid Styles */
-#redis-sections {
-    display: flex;
-    flex-wrap: wrap;
-}
-
 section {
-    padding-bottom: 2rem;
-    padding-top: 2rem;
-    width: 50%;
-}
-
-section:nth-child(odd) {
-    padding-right: 1.5rem;
-}
-
-section:nth-child(even) {
-    padding-left: 1.5rem;
+    padding: 2rem 0;
 }
 
 h2 {
@@ -47,14 +32,30 @@ h2,
 /* Databases */
 #databases .database-wrapper {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
 }
 
 #databases .database-info {
-    margin-bottom: 2rem;
-    margin-right: 5rem;
+    border: 2px solid #000000;
+    border-radius: 2rem;
+    display: flex;
+    margin-bottom: 3rem;
+    padding: 2rem;
+}
+
+.database-info .database-data {
+    min-width: 30rem;
 }
 
 #databases li {
     padding-left: 2rem;
+}
+
+.database-charts {
+    display: flex;
+    flex-direction: column;
+}
+
+.database-chart {
+    padding-bottom: 5rem;
 }

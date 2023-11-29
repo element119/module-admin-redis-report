@@ -14,6 +14,8 @@ use Magento\Framework\Escaper;
 /** @var array $redisInfo */
 /** @see RedisInfo::get() */
 $redisInfo = $block->getData('redis_info');
+$historicData = $block->getData('historic_redis_data');
+$databasesHistory = array_column($historicData, 'databases');
 ?>
 <section id="databases">
     <h2><?= $escaper->escapeHtml(__('Database(s)')); ?></h2>
@@ -21,15 +23,121 @@ $redisInfo = $block->getData('redis_info');
     <div class="database-wrapper">
         <?php foreach ($redisInfo['databases'] as $dbNumber => $data): ?>
             <div class="database-info">
-                <b><?= $escaper->escapeHtml($dbNumber); ?></b>
-                <ul class="data-list">
-                    <?php foreach ($data as $key => $value): ?>
-                        <li>
-                            <b><?= $escaper->escapeHtml(ucwords(str_replace('_', ' ', $key))); ?>:</b>
-                            <?= $escaper->escapeHtml($value); ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
+                <div class="database-data">
+                    <b><?= $escaper->escapeHtml($dbNumber); ?></b>
+                    <ul class="data-list">
+                        <?php foreach ($data as $key => $value): ?>
+                            <li>
+                                <b><?= $escaper->escapeHtml(ucwords(str_replace('_', ' ', $key))); ?>:</b>
+                                <?= $escaper->escapeHtml($value); ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+
+                <?php if ($databasesHistory
+                    && $historicDbNumberData = array_column($databasesHistory, $dbNumber)
+                ): ?>
+                    <div class="database-charts">
+                        <div class="database-chart">
+                            <canvas id="<?= $escaper->escapeHtmlAttr(
+                                        sprintf('database-%s-keyspace-chart', $dbNumber)
+                                    ); ?>"
+                                    width="1250"
+                                    height="500"/>
+                            <script type="text/x-magento-init">
+                                {
+                                    "#<?= $escaper->escapeHtml(sprintf('database-%s-keyspace-chart', $dbNumber)); ?>": {
+                                        "Element119_AdminRedisReport/js/chart": {
+                                            "type": "line",
+                                            "data": {
+                                                "labels": <?= /** @noEscape */ json_encode(array_keys($historicData)); ?>,
+                                                "datasets": [
+                                                    {
+                                                        "label": "<?= $escaper->escapeHtml(__('Keys')); ?>",
+                                                        "data": <?= /** @noEscape */ json_encode(array_column($historicDbNumberData, 'keys')); ?>
+                                                    },
+                                                    {
+                                                        "label": "<?= $escaper->escapeHtml(__('Expiring Keys')); ?>",
+                                                        "data": <?= /** @noEscape */ json_encode(array_column($historicDbNumberData, 'expires')); ?>
+                                                    }
+                                                ]
+                                            },
+                                            "options": {
+                                                "responsive": true,
+                                                "interaction": {
+                                                    "mode": "index",
+                                                    "intersect": false
+                                                },
+                                                "stacked": false,
+                                                "plugins": {
+                                                    "legend": {
+                                                        "position": "top"
+                                                    }
+                                                },
+                                                "scales": {
+                                                    "y": {
+                                                        "beginAtZero": true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            </script>
+                        </div>
+                        <div class="database-chart">
+                            <canvas id="<?= $escaper->escapeHtmlAttr(sprintf('database-%s-ttl-chart', $dbNumber)); ?>"
+                                    width="1250"
+                                    height="500"/>
+                            <script type="text/x-magento-init">
+                                {
+                                    "#<?= $escaper->escapeHtml(sprintf('database-%s-ttl-chart', $dbNumber)); ?>": {
+                                        "Element119_AdminRedisReport/js/chart": {
+                                            "type": "line",
+                                            "data": {
+                                                "labels": <?= /** @noEscape */ json_encode(array_keys($historicData)); ?>,
+                                                "datasets": [
+                                                    {
+                                                        "label": "<?= $escaper->escapeHtml(__('Average Key TTL (mins)')); ?>",
+                                                        "data": <?= /** @noEscape */ json_encode(
+                                                            array_map(
+                                                                function ($ttl) {
+                                                                    $ttlValue = str_replace(' seconds', '', $ttl);
+
+                                                                    return((float)$ttlValue) / 1000 / 60; // convert to minutes
+                                                                },
+                                                                array_column($historicDbNumberData, 'avg_ttl')
+                                                            )
+                                                        ); ?>
+                                                    }
+                                                ]
+                                            },
+                                            "options": {
+                                                "responsive": true,
+                                                "interaction": {
+                                                    "mode": "index",
+                                                    "intersect": false
+                                                },
+                                                "stacked": false,
+                                                "plugins": {
+                                                    "legend": {
+                                                        "position": "top"
+                                                    }
+                                                },
+                                                "scales": {
+                                                    "y": {
+                                                        "beginAtZero": true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>
