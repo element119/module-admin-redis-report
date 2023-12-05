@@ -23,6 +23,7 @@ $historicChartData = array_column($historicData, RedisReportInterface::CHART_DAT
 
     <div class="memory-wrapper">
         <div class="memory-data">
+            <h3><?= $escaper->escapeHtml(__('Live Data Snapshot')); ?></h3>
             <ul class="data-list">
                 <?php foreach ($redisInfo['memory'] as $key => $value): ?>
                     <li>
@@ -35,6 +36,7 @@ $historicChartData = array_column($historicData, RedisReportInterface::CHART_DAT
 
         <?php if ($historicChartData && $historicMemoryChartData = array_column($historicChartData, 'memory')): ?>
             <div class="memory-charts">
+                <h3><?= $escaper->escapeHtml(__('History')); ?></h3>
                 <div class="memory-chart">
                     <canvas id="raw-memory-usage-chart"
                             width="1250"

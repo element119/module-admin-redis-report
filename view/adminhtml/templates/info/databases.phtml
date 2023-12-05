@@ -24,6 +24,7 @@ $databasesHistory = array_column($historicData, 'databases');
         <?php foreach ($redisInfo['databases'] as $dbNumber => $data): ?>
             <div class="database-info">
                 <div class="database-data">
+                    <h3><?= $escaper->escapeHtml(__('Live Data Snapshot')); ?></h3>
                     <b><?= $escaper->escapeHtml($dbNumber); ?></b>
                     <ul class="data-list">
                         <?php foreach ($data as $key => $value): ?>
@@ -40,6 +41,7 @@ $databasesHistory = array_column($historicData, 'databases');
                 ): ?>
                     <div class="database-charts">
                         <div class="database-chart">
+                            <h3><?= $escaper->escapeHtml(__('History')); ?></h3>
                             <canvas id="<?= $escaper->escapeHtmlAttr(
                                         sprintf('database-%s-keyspace-chart', $dbNumber)
                                     ); ?>"

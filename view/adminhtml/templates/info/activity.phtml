@@ -23,6 +23,7 @@ $historicChartData = array_column($historicData, RedisReportInterface::CHART_DAT
 
     <div class="activity-wrapper">
         <div class="activity-data">
+            <h3><?= $escaper->escapeHtml(__('Live Data Snapshot')); ?></h3>
             <ul class="data-list">
                 <?php foreach ($redisInfo['activity'] as $key => $value): ?>
                     <li>
@@ -35,6 +36,7 @@ $historicChartData = array_column($historicData, RedisReportInterface::CHART_DAT
 
         <?php if ($historicChartData && $historicActivityChartData = array_column($historicChartData, 'activity')): ?>
             <div class="activity-charts">
+                <h3><?= $escaper->escapeHtml(__('History')); ?></h3>
                 <div class="activity-chart">
                     <canvas id="raw-keyspace-activity-chart"
                             width="1250"

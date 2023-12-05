@@ -22,6 +22,7 @@ $connectionsHistory = array_column($historicData, 'connections');
 
     <div class="connections-wrapper">
         <div class="connections-data">
+            <h3><?= $escaper->escapeHtml(__('Live Data Snapshot')); ?></h3>
             <ul class="data-list">
                 <?php foreach ($redisInfo['connections'] as $key => $value): ?>
                     <li>
@@ -34,6 +35,7 @@ $connectionsHistory = array_column($historicData, 'connections');
 
         <?php if ($connectionsHistory): ?>
             <div class="connections-charts">
+                <h3><?= $escaper->escapeHtml(__('History')); ?></h3>
                 <div class="connections-chart">
                     <canvas id="connections-chart"
                             width="1250"
