@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Element119\AdminRedisReport\Api\Data\RedisReportInterface;
 use Element119\AdminRedisReport\Model\RedisInfo;
 use Magento\Backend\Block\Template;
 use Magento\Framework\Escaper;
@@ -14,15 +15,273 @@ use Magento\Framework\Escaper;
 /** @var array $redisInfo */
 /** @see RedisInfo::get() */
 $redisInfo = $block->getData('redis_info');
+$historicData = $block->getData('historic_redis_data');
+$historicChartData = array_column($historicData, RedisReportInterface::CHART_DATA);
 ?>
 <section id="activity">
     <h2><?= $escaper->escapeHtml(__('Activity')); ?></h2>
-    <ul class="data-list">
-        <?php foreach ($redisInfo['activity'] as $key => $value): ?>
-            <li>
-                <b><?= $escaper->escapeHtml(__($key)); ?>:</b>
-                <?= $escaper->escapeHtml($value); ?>
-            </li>
-        <?php endforeach; ?>
-    </ul>
+
+    <div class="activity-wrapper">
+        <div class="activity-data">
+            <ul class="data-list">
+                <?php foreach ($redisInfo['activity'] as $key => $value): ?>
+                    <li>
+                        <b><?= $escaper->escapeHtml(__($key)); ?>:</b>
+                        <?= $escaper->escapeHtml($value); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
+        <?php if ($historicChartData && $historicActivityChartData = array_column($historicChartData, 'activity')): ?>
+            <div class="activity-charts">
+                <div class="activity-chart">
+                    <canvas id="raw-keyspace-activity-chart"
+                            width="1250"
+                            height="500"/>
+                    <script type="text/x-magento-init">
+                        {
+                            "#raw-keyspace-activity-chart": {
+                                "Element119_AdminRedisReport/js/chart": {
+                                    "type": "line",
+                                    "data": {
+                                        "labels": <?= /** @noEscape */ json_encode(
+                                            array_column($historicChartData, RedisReportInterface::CREATED_AT)
+                                        ); ?>,
+                                        "datasets": [
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Keyspace Hits')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'intval',
+                                                        array_column($historicActivityChartData, 'Keyspace Hits')
+                                                    )
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Keyspace Misses')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'intval',
+                                                        array_column($historicActivityChartData, 'Keyspace Misses')
+                                                    )
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Total Error Replies')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'intval',
+                                                        array_column($historicActivityChartData, 'Total Error Replies')
+                                                    )
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Evicted Keys')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'intval',
+                                                        array_column($historicActivityChartData, 'Evicted Keys')
+                                                    )
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Expired Keys')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'intval',
+                                                        array_column($historicActivityChartData, 'Expired Keys')
+                                                    )
+                                                ); ?>
+                                            }
+                                        ]
+                                    },
+                                    "options": {
+                                        "responsive": true,
+                                        "interaction": {
+                                            "mode": "index",
+                                            "intersect": false
+                                        },
+                                        "stacked": false,
+                                        "plugins": {
+                                            "legend": {
+                                                "position": "top"
+                                            }
+                                        },
+                                        "scales": {
+                                            "y": {
+                                                "beginAtZero": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </script>
+                </div>
+                <div class="activity-chart">
+                    <canvas id="keyspace-hit-rate-chart"
+                            width="1250"
+                            height="500"/>
+                    <script type="text/x-magento-init">
+                        {
+                            "#keyspace-hit-rate-chart": {
+                                "Element119_AdminRedisReport/js/chart": {
+                                    "type": "line",
+                                    "data": {
+                                        "labels": <?= /** @noEscape */ json_encode(
+                                            array_column($historicChartData, RedisReportInterface::CREATED_AT)
+                                        ); ?>,
+                                        "datasets": [
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Hit Rate')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'floatval',
+                                                        array_column($historicActivityChartData, 'Hit Rate')
+                                                    )
+                                                ); ?>
+                                            }
+                                        ]
+                                    },
+                                    "options": {
+                                        "responsive": true,
+                                        "interaction": {
+                                            "mode": "index",
+                                            "intersect": false
+                                        },
+                                        "stacked": false,
+                                        "plugins": {
+                                            "legend": {
+                                                "position": "top"
+                                            }
+                                        },
+                                        "scales": {
+                                            "y": {
+                                                "beginAtZero": true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </script>
+                </div>
+                <div class="activity-chart">
+                    <canvas id="cpu-time-activity-chart"
+                            width="1250"
+                            height="500"/>
+                    <script type="text/x-magento-init">
+                        {
+                            "#cpu-time-activity-chart": {
+                                "Element119_AdminRedisReport/js/chart": {
+                                    "type": "line",
+                                    "data": {
+                                        "labels": <?= /** @noEscape */ json_encode(
+                                            array_column($historicChartData, RedisReportInterface::CREATED_AT)
+                                        ); ?>,
+                                        "datasets": [
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Sys CPU Time (Secs)')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'floatval',
+                                                        array_column($historicActivityChartData, 'Used CPU Time (Sys)')
+                                                    )
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('User CPU Time (Secs)')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'floatval',
+                                                        array_column($historicActivityChartData, 'Used CPU Time (User)')
+                                                    )
+                                                ); ?>
+                                            }
+                                        ]
+                                    },
+                                    "options": {
+                                        "responsive": true,
+                                        "interaction": {
+                                            "mode": "index",
+                                            "intersect": false
+                                        },
+                                        "stacked": false,
+                                        "plugins": {
+                                            "legend": {
+                                                "position": "top"
+                                            }
+                                        },
+                                        "scales": {
+                                            "y": {
+                                                "beginAtZero": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </script>
+                </div>
+                <div class="activity-chart">
+                    <canvas id="io-activity-chart"
+                            width="1250"
+                            height="500"/>
+                    <script type="text/x-magento-init">
+                        {
+                            "#io-activity-chart": {
+                                "Element119_AdminRedisReport/js/chart": {
+                                    "type": "line",
+                                    "data": {
+                                        "labels": <?= /** @noEscape */ json_encode(
+                                            array_column($historicChartData, RedisReportInterface::CREATED_AT)
+                                        ); ?>,
+                                        "datasets": [
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Total Reads Processed')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'floatval',
+                                                        array_column($historicActivityChartData, 'Total Reads Processed')
+                                                    )
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Total Writes Processed')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'floatval',
+                                                        array_column($historicActivityChartData, 'Total Writes Processed')
+                                                    )
+                                                ); ?>
+                                            }
+                                        ]
+                                    },
+                                    "options": {
+                                        "responsive": true,
+                                        "interaction": {
+                                            "mode": "index",
+                                            "intersect": false
+                                        },
+                                        "stacked": false,
+                                        "plugins": {
+                                            "legend": {
+                                                "position": "top"
+                                            }
+                                        },
+                                        "scales": {
+                                            "y": {
+                                                "beginAtZero": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
 </section>

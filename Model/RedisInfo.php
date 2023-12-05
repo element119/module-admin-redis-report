@@ -83,7 +83,6 @@ class RedisInfo implements ArgumentInterface
                     'Percentage of Keys Used by Magento' => $this->getMagentoKeyUsagePercentage($redisInfo),
                 ],
                 'activity' => [
-                    'Uptime in Hours' => $redisInfo['uptime_in_seconds'] / 3600,
                     'Keyspace Hits' => $redisInfo['keyspace_hits'],
                     'Keyspace Misses' => $redisInfo['keyspace_misses'],
                     'Hit Rate' => $this->redis->getHitMissPercentage(),
