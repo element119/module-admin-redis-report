@@ -9,7 +9,6 @@
     margin-bottom: 2rem;
 }
 
-/* Generic Section Grid Styles */
 section {
     padding: 2rem 0;
 }
@@ -28,13 +27,6 @@ h2,
     margin: 0;
 }
 
-/* Specific Section Grid Styles */
-/* Databases */
-#databases .database-wrapper {
-    display: flex;
-    flex-direction: column;
-}
-
 #databases .database-info,
 #memory .memory-wrapper,
 #activity .activity-wrapper,
@@ -46,17 +38,19 @@ h2,
     padding: 2rem;
 }
 
-.database-info .database-data {
-    min-width: 30rem;
+.database-data,
+.memory-data,
+.activity-data,
+.connections-data {
+    padding-right: 3rem;
 }
 
-#databases li {
-    padding-left: 2rem;
-}
-
-.database-charts {
-    display: flex;
-    flex-direction: column;
+.database-charts,
+.memory-charts,
+.activity-charts,
+.connections-charts {
+    border-left: 1px dashed black;
+    padding-left: 3rem;
 }
 
 .database-chart,
@@ -64,4 +58,8 @@ h2,
 .activity-chart,
 .connections-chart {
     padding-bottom: 5rem;
+}
+
+#databases li {
+    padding-left: 2rem;
 }
