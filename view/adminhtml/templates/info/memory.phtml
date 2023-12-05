@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Element119\AdminRedisReport\Api\Data\RedisReportInterface;
 use Element119\AdminRedisReport\Model\RedisInfo;
 use Magento\Backend\Block\Template;
 use Magento\Framework\Escaper;
@@ -14,15 +15,169 @@ use Magento\Framework\Escaper;
 /** @var array $redisInfo */
 /** @see RedisInfo::get() */
 $redisInfo = $block->getData('redis_info');
+$historicData = $block->getData('historic_redis_data');
+$historicChartData = array_column($historicData, RedisReportInterface::CHART_DATA);
 ?>
 <section id="memory">
     <h2><?= $escaper->escapeHtml(__('Memory')); ?></h2>
-    <ul class="data-list">
-        <?php foreach ($redisInfo['memory'] as $key => $value): ?>
-            <li>
-                <b><?= $escaper->escapeHtml(__($key)); ?>:</b>
-                <?= $escaper->escapeHtml($value); ?>
-            </li>
-        <?php endforeach; ?>
-    </ul>
+
+    <div class="memory-wrapper">
+        <div class="memory-data">
+            <ul class="data-list">
+                <?php foreach ($redisInfo['memory'] as $key => $value): ?>
+                    <li>
+                        <b><?= $escaper->escapeHtml(__($key)); ?>:</b>
+                        <?= $escaper->escapeHtml($value); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
+        <?php if ($historicChartData && $historicMemoryChartData = array_column($historicChartData, 'memory')): ?>
+            <div class="memory-charts">
+                <div class="memory-chart">
+                    <canvas id="raw-memory-usage-chart"
+                            width="1250"
+                            height="500"/>
+                    <script type="text/x-magento-init">
+                        {
+                            "#raw-memory-usage-chart": {
+                                "Element119_AdminRedisReport/js/chart": {
+                                    "type": "line",
+                                    "data": {
+                                        "labels": <?= /** @noEscape */ json_encode(
+                                            array_column($historicChartData, RedisReportInterface::CREATED_AT)
+                                        ); ?>,
+                                        "datasets": [
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Used Memory (MB)')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        function ($memoryChartData) {
+                                                            return $memoryChartData['Used Memory'] / pow(1024, 2);
+                                                        },
+                                                        $historicMemoryChartData
+                                                    )
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Used Memory Peak (MB)')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        function ($memoryChartData) {
+                                                            return $memoryChartData['Used Memory Peak'] / pow(1024, 2);
+                                                        },
+                                                        $historicMemoryChartData
+                                                    )
+                                                ); ?>
+                                            }
+                                        ]
+                                    },
+                                    "options": {
+                                        "responsive": true,
+                                        "interaction": {
+                                            "mode": "index",
+                                            "intersect": false
+                                        },
+                                        "stacked": false,
+                                        "plugins": {
+                                            "legend": {
+                                                "position": "top"
+                                            }
+                                        },
+                                        "scales": {
+                                            "y": {
+                                                "beginAtZero": true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </script>
+                </div>
+                <div class="memory-chart">
+                    <canvas id="percentage-memory-usage-chart"
+                            width="1250"
+                            height="500"/>
+                    <script type="text/x-magento-init">
+                        {
+                            "#percentage-memory-usage-chart": {
+                                "Element119_AdminRedisReport/js/chart": {
+                                    "type": "line",
+                                    "data": {
+                                        "labels": <?= /** @noEscape */ json_encode(
+                                            array_column($historicChartData, RedisReportInterface::CREATED_AT)
+                                        ); ?>,
+                                        "datasets": [
+                                            {
+                                                "label": "<?= $escaper->escapeJs(
+                                                    __('Used Memory Peak Percentage')
+                                                ); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'floatval',
+                                                        array_column(
+                                                            $historicMemoryChartData,
+                                                            'Used Memory Peak Percentage'
+                                                        )
+                                                    )
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(
+                                                    __('Used Memory Dataset Percentage')
+                                                ); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'floatval',
+                                                        array_column(
+                                                            $historicMemoryChartData,
+                                                            'Used Memory Dataset Percentage'
+                                                        )
+                                                    )
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(
+                                                    __('Percentage of Keys Used by Magento')
+                                                ); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_map(
+                                                        'floatval',
+                                                        array_column(
+                                                            $historicMemoryChartData,
+                                                            'Percentage of Keys Used by Magento'
+                                                        )
+                                                    )
+                                                ); ?>
+                                            }
+                                        ]
+                                    },
+                                    "options": {
+                                        "responsive": true,
+                                        "interaction": {
+                                            "mode": "index",
+                                            "intersect": false
+                                        },
+                                        "stacked": false,
+                                        "plugins": {
+                                            "legend": {
+                                                "position": "top"
+                                            }
+                                        },
+                                        "scales": {
+                                            "y": {
+                                                "beginAtZero": true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
 </section>

@@ -35,7 +35,8 @@ h2,
     flex-direction: column;
 }
 
-#databases .database-info {
+#databases .database-info,
+#memory .memory-wrapper {
     border: 2px solid #000000;
     border-radius: 2rem;
     display: flex;
@@ -56,6 +57,7 @@ h2,
     flex-direction: column;
 }
 
-.database-chart {
+.database-chart,
+.memory-chart {
     padding-bottom: 5rem;
 }
