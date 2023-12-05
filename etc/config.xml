@@ -11,7 +11,7 @@
         <system>
             <redis_report>
                 <cron_enable>1</cron_enable>
-                <log_truncate_days>180</log_truncate_days>
+                <log_truncate_days>28</log_truncate_days>
             </redis_report>
         </system>
     </default>
