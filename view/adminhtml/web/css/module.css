@@ -37,7 +37,8 @@ h2,
 
 #databases .database-info,
 #memory .memory-wrapper,
-#activity .activity-wrapper {
+#activity .activity-wrapper,
+#connections .connections-wrapper {
     border: 2px solid #000000;
     border-radius: 2rem;
     display: flex;
@@ -60,6 +61,7 @@ h2,
 
 .database-chart,
 .memory-chart,
-.activity-chart {
+.activity-chart,
+.connections-chart {
     padding-bottom: 5rem;
 }

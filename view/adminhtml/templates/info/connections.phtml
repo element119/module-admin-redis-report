@@ -14,15 +14,88 @@ use Magento\Framework\Escaper;
 /** @var array $redisInfo */
 /** @see RedisInfo::get() */
 $redisInfo = $block->getData('redis_info');
+$historicData = $block->getData('historic_redis_data');
+$connectionsHistory = array_column($historicData, 'connections');
 ?>
 <section id="connections">
     <h2><?= $escaper->escapeHtml(__('Connections')); ?></h2>
-    <ul class="data-list">
-        <?php foreach ($redisInfo['connections'] as $key => $value): ?>
-            <li>
-                <b><?= $escaper->escapeHtml(__($key)); ?>:</b>
-                <?= $escaper->escapeHtml($value); ?>
-            </li>
-        <?php endforeach; ?>
-    </ul>
+
+    <div class="connections-wrapper">
+        <div class="connections-data">
+            <ul class="data-list">
+                <?php foreach ($redisInfo['connections'] as $key => $value): ?>
+                    <li>
+                        <b><?= $escaper->escapeHtml(__($key)); ?>:</b>
+                        <?= $escaper->escapeHtml($value); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
+        <?php if ($connectionsHistory): ?>
+            <div class="connections-charts">
+                <div class="connections-chart">
+                    <canvas id="connections-chart"
+                            width="1250"
+                            height="500"/>
+                    <script type="text/x-magento-init">
+                        {
+                            "#connections-chart": {
+                                "Element119_AdminRedisReport/js/chart": {
+                                    "type": "line",
+                                    "data": {
+                                        "labels": <?= /** @noEscape */ json_encode(array_keys($historicData)); ?>,
+                                        "datasets": [
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Max. Clients')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_column($connectionsHistory, 'Max. Clients')
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Connected Clients')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_column($connectionsHistory, 'Connected Clients')
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Cluster Connections')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_column($connectionsHistory, 'Cluster Connections')
+                                                ); ?>
+                                            },
+                                            {
+                                                "label": "<?= $escaper->escapeJs(__('Rejected Connections')); ?>",
+                                                "data": <?= /** @noEscape */ json_encode(
+                                                    array_column($connectionsHistory, 'Rejected Connections')
+                                                ); ?>
+                                            }
+                                        ]
+                                    },
+                                    "options": {
+                                        "responsive": true,
+                                        "interaction": {
+                                            "mode": "index",
+                                            "intersect": false
+                                        },
+                                        "stacked": false,
+                                        "plugins": {
+                                            "legend": {
+                                                "position": "top"
+                                            }
+                                        },
+                                        "scales": {
+                                            "y": {
+                                                "beginAtZero": true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
 </section>
