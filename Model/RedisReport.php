@@ -56,6 +56,22 @@ class RedisReport extends AbstractModel implements RedisReportInterface
     /**
      * @inheritDoc
      */
+    public function getChartData(): array
+    {
+        return $this->getData(json_decode(self::CHART_DATA));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setChartData(array $chartData): RedisReportInterface
+    {
+        return $this->setData(self::CHART_DATA, json_encode($chartData));
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getCreatedAt(): string
     {
         return $this->getData(self::CREATED_AT);

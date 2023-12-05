@@ -74,6 +74,28 @@ class RedisInfo implements ArgumentInterface
                 'Total Reads Processed' => $redisInfo['total_reads_processed'],
                 'Total Writes Processed' => $redisInfo['total_writes_processed'],
             ],
+            'chart-data' => [
+                'memory' => [
+                    'Used Memory' => $redisInfo['used_memory'],
+                    'Used Memory Peak' => $redisInfo['used_memory_peak'],
+                    'Used Memory Peak Percentage' => $redisInfo['used_memory_peak_perc'],
+                    'Used Memory Dataset Percentage' => $redisInfo['used_memory_dataset_perc'],
+                    'Percentage of Keys Used by Magento' => $this->getMagentoKeyUsagePercentage($redisInfo),
+                ],
+                'activity' => [
+                    'Uptime in Hours' => $redisInfo['uptime_in_seconds'] / 3600,
+                    'Keyspace Hits' => $redisInfo['keyspace_hits'],
+                    'Keyspace Misses' => $redisInfo['keyspace_misses'],
+                    'Hit Rate' => $this->redis->getHitMissPercentage(),
+                    'Total Error Replies' => $redisInfo['total_error_replies'],
+                    'Evicted Keys' => $redisInfo['evicted_keys'],
+                    'Expired Keys' => $redisInfo['expired_keys'],
+                    'Used CPU Time (Sys)' => round((float)$redisInfo['used_cpu_sys'], 2),
+                    'Used CPU Time (User)' => round((float)$redisInfo['used_cpu_user'], 2),
+                    'Total Reads Processed' => $redisInfo['total_reads_processed'],
+                    'Total Writes Processed' => $redisInfo['total_writes_processed'],
+                ],
+            ],
         ];
     }
 
@@ -130,6 +152,7 @@ class RedisInfo implements ArgumentInterface
             $this->resourceConnection->getTableName(RedisReportRepositoryInterface::MAIN_TABLE),
             [
                 RedisReportInterface::REPORT_DATA,
+                RedisReportInterface::CHART_DATA,
                 RedisReportInterface::CREATED_AT,
             ]
         );
@@ -138,6 +161,13 @@ class RedisInfo implements ArgumentInterface
             $reportData[$dbData[RedisReportInterface::CREATED_AT]] = json_decode(
                 $dbData[RedisReportInterface::REPORT_DATA], true
             );
+
+            if ($dbData[RedisReportInterface::CHART_DATA]) {
+                $chartData = json_decode($dbData[RedisReportInterface::CHART_DATA], true);
+                $chartData[RedisReportInterface::CREATED_AT] = $dbData[RedisReportInterface::CREATED_AT];
+
+                $reportData[$dbData[RedisReportInterface::CREATED_AT]][RedisReportInterface::CHART_DATA] = $chartData;
+            }
         }
 
         return $reportData;

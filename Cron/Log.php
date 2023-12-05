@@ -47,7 +47,14 @@ class Log
 
         /** @var RedisReportInterface $redisReportModel */
         $redisReportModel = $this->redisReportFactory->create();
-        $redisReportModel->setReportData($this->redisInfo->get());
+        $allRedisData = $this->redisInfo->get();
+
+        if (array_key_exists('chart-data', $allRedisData)) {
+            $redisReportModel->setChartData($allRedisData['chart-data']);
+            unset($allRedisData['chart-data']);
+        }
+
+        $redisReportModel->setReportData($allRedisData);
         $this->redisReportRepository->save($redisReportModel);
     }
 }

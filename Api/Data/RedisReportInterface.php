@@ -11,6 +11,7 @@ interface RedisReportInterface
 {
     public const ENTITY_ID = 'entity_id';
     public const REPORT_DATA = 'report_data';
+    public const CHART_DATA = 'chart_data';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
 
@@ -35,6 +36,17 @@ interface RedisReportInterface
      * @return self
      */
     public function setReportData(array $reportData): self;
+
+    /**
+     * @return array
+     */
+    public function getChartData(): array;
+
+    /**
+     * @param array $chartData
+     * @return self
+     */
+    public function setChartData(array $chartData): self;
 
     /**
      * @return string

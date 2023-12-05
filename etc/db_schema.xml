@@ -18,6 +18,10 @@
                 xsi:type="json"
                 nullable="true"
                 comment="Report Data as JSON"/>
+        <column name="chart_data"
+                xsi:type="json"
+                nullable="true"
+                comment="Chart Specific Data as JSON"/>
         <column name="created_at"
                 xsi:type="timestamp"
                 on_update="false"
