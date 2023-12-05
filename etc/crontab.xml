@@ -11,7 +11,7 @@
         <job name="redis_report_logger"
              instance="Element119\AdminRedisReport\Cron\Log"
              method="execute">
-            <schedule>*/30 * * * *</schedule>
+            <schedule>0 * * * *</schedule>
         </job>
         <job name="redis_report_log_clean"
              instance="Element119\AdminRedisReport\Cron\Clean"
