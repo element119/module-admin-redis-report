@@ -9,7 +9,9 @@
 ## 📝 Features
 ✔️ See a snapshot of the health of Redis from the comfort of the Magento admin
 
-✔️ Supports Magento Open Source and Adobe Commerce
+✔️ Visualise historic Redis health statistics 
+
+✔️ Supports Magento Open Source, Adobe Commerce, and Mage-OS
 
 ✔️ Built in accordance with Magento best practises
 
@@ -24,7 +26,7 @@
 ✔️ Theme agnostic
 
 ### Upcoming
-⏳ Data visualisation for both current and historic Redis health data
+⏳ Ability to filter historic charts by date range
 
 <br/>
 
@@ -80,8 +82,7 @@ An empty value means data will be kept indefinitely.
 ### Admin Configuration
 ![admin-config](https://github.com/element119/module-admin-redis-report/assets/40261741/853aea10-d995-4cb1-a4d7-9dc7cdccafd3)
 
-
 <br>
 
 ### Admin Report
-![admin-report](https://github.com/element119/module-admin-redis-report/assets/40261741/c679fd5f-802c-49b3-b279-a8cce75e5c44)
+![admin-report](https://github.com/element119/module-admin-redis-report/assets/40261741/5015905d-fb0d-40fe-99f5-b5ec29b207ee)
