@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Element119\AdminRedisReport\Model;
 
+use Cm_Cache_Backend_Redis;
 use Element119\AdminRedisReport\Api\Data\RedisReportInterface;
 use Element119\AdminRedisReport\Api\RedisReportRepositoryInterface;
 use Magento\Framework\App\CacheInterface;
@@ -19,9 +20,11 @@ use Zend_Db_Statement_Exception;
 class RedisInfo implements ArgumentInterface
 {
     private CacheInterface $cache;
-    private Redis $redis;
     private DeploymentConfig $deploymentConfig;
     private ResourceConnection $resourceConnection;
+
+    /** @var Redis|Cm_Cache_Backend_Redis */
+    private $redis;
 
     public function __construct(
         CacheInterface $cache,
