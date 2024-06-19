@@ -2,7 +2,7 @@
     "name": "element119/module-admin-redis-report",
     "type": "magento2-module",
     "description": "A Magento 2 module that displays Redis information in the admin.",
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "element119",
