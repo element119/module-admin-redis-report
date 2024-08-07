@@ -105,7 +105,7 @@ $databasesHistory = array_column($historicData, 'databases');
                                                         "data": <?= /** @noEscape */ json_encode(
                                                             array_map(
                                                                 function ($ttl) {
-                                                                    $ttlValue = str_replace(' seconds', '', $ttl);
+                                                                    $ttlValue = str_replace(' seconds', '', (string)$ttl);
 
                                                                     return((float)$ttlValue) / 1000 / 60; // convert to minutes
                                                                 },
