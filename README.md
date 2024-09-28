@@ -30,6 +30,8 @@
 
 <br/>
 
+## ⛔️ Incompatibilities
+
 > [!CAUTION]
 > This module is not compatible with Magento instances that utilise the Redis L2 cache and/or the
 > `Magento\Framework\Cache\Backend\RemoteSynchronizedCache` class for the Redis backend cache.
