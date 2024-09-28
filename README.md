@@ -30,6 +30,16 @@
 
 <br/>
 
+> [!CAUTION]
+> This module is not compatible with Magento instances that utilise the Redis L2 cache and/or the
+> `Magento\Framework\Cache\Backend\RemoteSynchronizedCache` class for the Redis backend cache.
+> 
+> More information is available in the Magento documentation:
+> - [Redis L2 Cache](https://experienceleague.adobe.com/en/docs/commerce-operations/implementation-playbook/best-practices/planning/redis-service-configuration#configure-redis-l2-cache)
+> - [Available Redis Backend Cache Classes](https://experienceleague.adobe.com/en/docs/commerce-cloud-service/user-guide/configure/env/stage/variables-deploy#redis_backend)
+
+<br/>
+
 ## 🔌 Installation
 Run the following command to *install* this module:
 ```bash
