@@ -39,7 +39,9 @@ class RedisInfo implements ArgumentInterface
 
     public function get(): array
     {
-        $redisInfo = $this->getAllRedisInfo();
+        if (!($redisInfo = $this->getAllRedisInfo())) {
+            return [];
+        }
 
         return [
             'version' => $redisInfo['redis_version'],
@@ -186,6 +188,8 @@ class RedisInfo implements ArgumentInterface
      */
     public function getAllRedisInfo(): array
     {
-        return $this->redis->getInfo();
+        return $this->redis instanceof Cm_Cache_Backend_Redis && method_exists($this->redis, 'getInfo')
+            ? $this->redis->getInfo()
+            : [];
     }
 }
